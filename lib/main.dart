@@ -1,11 +1,20 @@
 // 2415051088 - Made Wilasih
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'providers/movie_provider.dart';
 import 'screens/home_screen.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Inisialisasi Supabase Database
+  await Supabase.initialize(
+    url: 'https://ubjzycqclzatlgwirnbf.supabase.co',
+    anonKey: 'sb_publishable_96XZvaIgKcMCLUCK6OM-jQ_af4a0bJA',
+  );
+
   runApp(const MyApp());
 }
 
