@@ -7,7 +7,7 @@ import '../models/movie_model.dart';
 
 class MovieService {
   // Ganti dengan API Key TMDB kamu (atau gunakan endpoint publik yang valid)
-  static const String apiKey = 'YOUR_TMDB_API_KEY';
+  static const String apiKey = 'eae974107602568774a45ff640139f27';
   static const String baseUrl = 'https://api.themoviedb.org/3/movie/popular';
 
   Future<List<Movie>> fetchPopularMovies() async {

@@ -1,48 +1,48 @@
+// 2415051088 - Made Wilasih
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../providers/movie_provider.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Panggil fetch data saat screen pertama kali dimuat
+    Future.microtask(
+      () => Provider.of<MovieProvider>(context, listen: false).fetchMovies(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(
-        0xFF121212,
-      ), // Dark Cinematic Background (Nyaman di mata)
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1F1F1F),
-        elevation: 0,
         title: const Text(
           'MovieExplorer',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 0.8,
-            color: Colors.white,
-            fontSize: 20,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
         ),
-        centerTitle: false,
+        backgroundColor: const Color(0xFF121212),
+        elevation: 0,
         actions: [
-          // Tombol Profil / Identitas Mahasiswa (Memenuhi syarat penilain & rapi)
           IconButton(
-            icon: const Icon(
-              Icons.account_circle_rounded,
-              color: Color(0xFFFFC107), // Aksen Gold/Amber mewah
-              size: 28,
-            ),
-            tooltip: 'Profil Mahasiswa',
+            icon: const Icon(Icons.account_circle, color: Color(0xFFFFC107)),
             onPressed: () {
-              // Dialog informasi identitas mahasiswa sesuai ketentuan UTS
+              // Dialog Identitas Pengembang (Made Wilasih - 2415051088)
               showDialog(
                 context: context,
                 builder: (context) => AlertDialog(
                   backgroundColor: const Color(0xFF1E1E1E),
                   title: const Text(
                     'Identitas Pengembang',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(color: Colors.white),
                   ),
                   content: const Column(
                     mainAxisSize: MainAxisSize.min,
@@ -50,22 +50,19 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         'Nama: Made Wilasih',
-                        style: TextStyle(color: Colors.white70, fontSize: 15),
+                        style: TextStyle(color: Colors.white70),
                       ),
-                      SizedBox(height: 6),
                       Text(
                         'NIM: 2415051088',
-                        style: TextStyle(color: Colors.white70, fontSize: 15),
+                        style: TextStyle(color: Colors.white70),
                       ),
-                      SizedBox(height: 6),
                       Text(
                         'Kelas: PTI 5E',
-                        style: TextStyle(color: Colors.white70, fontSize: 15),
+                        style: TextStyle(color: Colors.white70),
                       ),
-                      SizedBox(height: 6),
                       Text(
                         'Tema: MovieExplorer',
-                        style: TextStyle(color: Colors.white70, fontSize: 15),
+                        style: TextStyle(color: Colors.white70),
                       ),
                     ],
                   ),
@@ -82,97 +79,129 @@ class HomeScreen extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(width: 8),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: GridView.builder(
-          itemCount: 6, // Contoh 6 grid katalog film dummy
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // 2 kolom grid responsif
-            crossAxisSpacing: 14,
-            mainAxisSpacing: 14,
-            childAspectRatio: 0.63, // Proporsi ideal poster film vertikal
-          ),
-          itemBuilder: (context, index) {
-            return Container(
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E1E1E), // Warna card kontras elegan
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.4),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Bagian Poster Mockup
-                  Expanded(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF2A2A2A),
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
-                        ),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.movie_creation_rounded,
-                          size: 48,
-                          color: Color(0xFFFFC107),
-                        ),
-                      ),
-                    ),
-                  ),
-                  // Bagian Teks & Rating Film
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Sample Movie ${index + 1}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
-                            color: Colors.white,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 6),
-                        const Row(
-                          children: [
-                            Icon(
-                              Icons.star_rounded,
-                              size: 16,
-                              color: Color(0xFFFFC107),
-                            ),
-                            SizedBox(width: 4),
-                            Text(
-                              '8.5 / 10',
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.white60,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+      body: Consumer<MovieProvider>(
+        builder: (context, provider, child) {
+          if (provider.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFFFFC107)),
+            );
+          }
+
+          if (provider.errorMessage.isNotEmpty) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(
+                  'Gagal memuat data:\n${provider.errorMessage}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: Colors.redAccent),
+                ),
               ),
             );
-          },
-        ),
+          }
+
+          if (provider.movies.isEmpty) {
+            return const Center(
+              child: Text(
+                'Tidak ada film ditemukan.',
+                style: TextStyle(color: Colors.white54),
+              ),
+            );
+          }
+
+          return GridView.builder(
+            padding: const EdgeInsets.all(12.0),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.65,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
+            itemCount: provider.movies.length,
+            itemBuilder: (context, index) {
+              final movie = provider.movies[index];
+              return Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E1E1E),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(12),
+                        ),
+                        child: movie.posterPath.isNotEmpty
+                            ? Image.network(
+                                movie.fullPosterPath,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                errorBuilder: (context, error, stackTrace) =>
+                                    const Center(
+                                      child: Icon(
+                                        Icons.broken_image,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                              )
+                            : Container(
+                                color: Colors.grey[800],
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.movie,
+                                    color: Color(0xFFFFC107),
+                                    size: 40,
+                                  ),
+                                ),
+                              ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            movie.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Color(0xFFFFC107),
+                                size: 14,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${movie.voteAverage.toStringAsFixed(1)} / 10',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }

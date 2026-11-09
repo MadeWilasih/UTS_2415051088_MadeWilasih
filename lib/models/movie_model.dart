@@ -1,4 +1,4 @@
-//2415051088 - Made Wilasih
+// 2415051088 - Made Wilasih
 
 class Movie {
   final int id;
@@ -40,5 +40,11 @@ class Movie {
       'user_note': '',
       'user_rating': 0.0,
     };
+  }
+
+  // === TAMBAHKAN GETTER INI DI BAGIAN BAWAH ===
+  String get fullPosterPath {
+    if (posterPath.isEmpty) return '';
+    return 'https://image.tmdb.org/t/p/w500$posterPath';
   }
 }
