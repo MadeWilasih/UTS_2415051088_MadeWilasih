@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/movie_provider.dart';
+import 'watchlist_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,6 +33,19 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: const Color(0xFF121212),
         elevation: 0,
         actions: [
+          // Tombol untuk membuka Watchlist Screen
+          IconButton(
+            icon: const Icon(Icons.bookmark, color: Color(0xFFFFC107)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const WatchlistScreen(),
+                ),
+              );
+            },
+          ),
+          // Tombol Identitas Pengembang
           IconButton(
             icon: const Icon(Icons.account_circle, color: Color(0xFFFFC107)),
             onPressed: () {
