@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
 import 'watchlist_screen.dart';
-
-// Nanti kita buat file search_screen.dart dan profile_screen.dart setelah ini
-// Untuk sementara kita siapkan kerangkanya dulu
+import 'profile_screen.dart'; // <-- 1. Impor file profile_screen.dart kamu
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -17,7 +15,7 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
-  // Daftar halaman yang akan dipanggil lewat Bottom Navigation Bar
+  // 2. Masukkan ProfileScreen() ke dalam daftar halaman navigasi
   final List<Widget> _pages = [
     const HomeScreen(),
     const WatchlistScreen(),
@@ -27,12 +25,7 @@ class _MainNavigationState extends State<MainNavigation> {
         style: TextStyle(color: Colors.white, fontSize: 16),
       ),
     ),
-    const Center(
-      child: Text(
-        'Fitur Profile (Segera Hadir)',
-        style: TextStyle(color: Colors.white, fontSize: 16),
-      ),
-    ),
+    const ProfileScreen(), // <-- Ganti Center(Text(...)) dengan ProfileScreen asli
   ];
 
   @override
