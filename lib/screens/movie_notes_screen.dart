@@ -148,30 +148,39 @@ class _MovieNotesScreenState extends State<MovieNotesScreen> {
                 final noteText = _noteController.text;
                 final ratingVal = double.parse(_ratingController.text);
 
-                Navigator.pop(dialogContext);
+                try {
+                  if (existingNote == null) {
+                    await _noteService.addNote(
+                      movieId: widget.movieId,
+                      title: widget.movieTitle,
+                      note: noteText,
+                      rating: ratingVal,
+                    );
+                  } else {
+                    await _noteService.updateNote(
+                      id: int.parse(existingNote['id'].toString()),
+                      note: noteText,
+                      rating: ratingVal,
+                    );
+                  }
 
-                if (existingNote == null) {
-                  await _noteService.addNote(
-                    movieId: widget.movieId,
-                    title: widget.movieTitle,
-                    note: noteText,
-                    rating: ratingVal,
+                  // Tutup dialog setelah proses database selesai
+                  if (!dialogContext.mounted) return;
+                  Navigator.pop(dialogContext);
+
+                  // Muat ulang data catatan
+                  await _fetchNotes();
+
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Catatan berhasil disimpan!')),
                   );
-                } else {
-                  await _noteService.updateNote(
-                    id: int.parse(existingNote['id'].toString()),
-                    note: noteText,
-                    rating: ratingVal,
+                } catch (e) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Gagal menyimpan: $e')),
                   );
                 }
-
-                if (!mounted) return;
-                _fetchNotes();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Catatan berhasil disimpan ke Supabase!'),
-                  ),
-                );
               }
             },
             child: const Text(
