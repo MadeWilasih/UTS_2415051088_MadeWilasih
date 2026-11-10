@@ -60,7 +60,7 @@ class MovieDetailScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Judul Film & Rating
+                  // Judul Film
                   Text(
                     movie.title,
                     style: const TextStyle(
@@ -70,6 +70,8 @@ class MovieDetailScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 8),
+
+                  // Rating & Tanggal Rilis
                   Row(
                     children: [
                       const Icon(
@@ -79,7 +81,24 @@ class MovieDetailScreen extends StatelessWidget {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        '${movie.voteAverage.toStringAsFixed(1)} / 10 (TMDB)',
+                        '${movie.voteAverage.toStringAsFixed(1)} / 10',
+                        style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      const Icon(
+                        Icons.calendar_today,
+                        color: Colors.grey,
+                        size: 14,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        movie.releaseDate.isNotEmpty
+                            ? movie.releaseDate
+                            : 'TBA',
                         style: const TextStyle(
                           color: Colors.white70,
                           fontSize: 14,
