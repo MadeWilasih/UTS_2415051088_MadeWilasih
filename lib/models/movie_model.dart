@@ -7,6 +7,7 @@ class Movie {
   final String posterPath;
   final double voteAverage;
   final String releaseDate;
+  final List<int> genreIds; // Tambahan untuk menampung ID genre film
 
   Movie({
     required this.id,
@@ -15,6 +16,7 @@ class Movie {
     required this.posterPath,
     required this.voteAverage,
     required this.releaseDate,
+    required this.genreIds,
   });
 
   // Factory constructor untuk parsing JSON dari TMDB API
@@ -28,6 +30,9 @@ class Movie {
           ? (json['vote_average'] as num).toDouble()
           : 0.0,
       releaseDate: json['release_date'] ?? '',
+      genreIds: json['genre_ids'] != null
+          ? List<int>.from(json['genre_ids'])
+          : [], // Parsing data genre_ids dari TMDB
     );
   }
 
@@ -42,7 +47,7 @@ class Movie {
     };
   }
 
-  // === TAMBAHKAN GETTER INI DI BAGIAN BAWAH ===
+  // Getter untuk URL Poster
   String get fullPosterPath {
     if (posterPath.isEmpty) return '';
     return 'https://image.tmdb.org/t/p/w500$posterPath';
