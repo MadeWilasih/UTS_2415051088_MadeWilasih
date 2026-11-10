@@ -155,7 +155,7 @@ class MovieDetailScreen extends StatelessWidget {
                       ),
                       icon: const Icon(Icons.note_add),
                       label: const Text(
-                        'Kelola Catatan & Review (Supabase)',
+                        'Kelola Catatan & Review',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,

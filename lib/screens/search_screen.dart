@@ -62,12 +62,14 @@ class _SearchScreenState extends State<SearchScreen> {
         title: TextField(
           controller: _searchController,
           style: const TextStyle(color: Colors.white),
+          // Ditambahkan onChanged agar pencarian langsung merespons saat diketik
+          onChanged: (value) => _searchMovies(value),
+          onSubmitted: (value) => _searchMovies(value),
           decoration: const InputDecoration(
             hintText: 'Cari judul film...',
             hintStyle: TextStyle(color: Colors.grey),
             border: InputBorder.none,
           ),
-          onSubmitted: (value) => _searchMovies(value),
         ),
         actions: [
           IconButton(
