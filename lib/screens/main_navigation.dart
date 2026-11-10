@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
 import 'watchlist_screen.dart';
-import 'profile_screen.dart'; // <-- 1. Impor file profile_screen.dart kamu
+import 'search_screen.dart'; // <-- Pastikan ini ada
+import 'profile_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -15,17 +16,11 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _currentIndex = 0;
 
-  // 2. Masukkan ProfileScreen() ke dalam daftar halaman navigasi
   final List<Widget> _pages = [
     const HomeScreen(),
     const WatchlistScreen(),
-    const Center(
-      child: Text(
-        'Fitur Search (Segera Hadir)',
-        style: TextStyle(color: Colors.white, fontSize: 16),
-      ),
-    ),
-    const ProfileScreen(), // <-- Ganti Center(Text(...)) dengan ProfileScreen asli
+    const SearchScreen(), // <-- Pastikan ini memanggil SearchScreen, bukan Center(Text(...))
+    const ProfileScreen(),
   ];
 
   @override

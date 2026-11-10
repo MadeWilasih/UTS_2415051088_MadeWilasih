@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/movie_provider.dart';
-import 'watchlist_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -32,68 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         backgroundColor: const Color(0xFF121212),
         elevation: 0,
-        actions: [
-          // Tombol untuk membuka Watchlist Screen
-          IconButton(
-            icon: const Icon(Icons.bookmark, color: Color(0xFFFFC107)),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const WatchlistScreen(),
-                ),
-              );
-            },
-          ),
-          // Tombol Identitas Pengembang
-          IconButton(
-            icon: const Icon(Icons.account_circle, color: Color(0xFFFFC107)),
-            onPressed: () {
-              // Dialog Identitas Pengembang (Made Wilasih - 2415051088)
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  backgroundColor: const Color(0xFF1E1E1E),
-                  title: const Text(
-                    'Identitas Pengembang',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  content: const Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Nama: Made Wilasih',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      Text(
-                        'NIM: 2415051088',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      Text(
-                        'Kelas: PTI 5E',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                      Text(
-                        'Tema: MovieExplorer',
-                        style: TextStyle(color: Colors.white70),
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text(
-                        'Tutup',
-                        style: TextStyle(color: Color(0xFFFFC107)),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Consumer<MovieProvider>(
         builder: (context, provider, child) {
