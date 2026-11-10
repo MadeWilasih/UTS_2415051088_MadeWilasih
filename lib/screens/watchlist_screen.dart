@@ -1,46 +1,30 @@
 // 2415051088 - Made Wilasih
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../repositories/watchlist_repository.dart';
+import '../providers/movie_provider.dart';
 
-class WatchlistScreen extends StatefulWidget {
+class WatchlistScreen extends StatelessWidget {
   const WatchlistScreen({super.key});
-
-  @override
-  State<WatchlistScreen> createState() => _WatchlistScreenState();
-}
-
-class _WatchlistScreenState extends State<WatchlistScreen> {
-  final WatchlistRepository _watchlistRepository = WatchlistRepository();
-  late Future<List> _watchlistFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadWatchlist();
-  }
-
-  void _loadWatchlist() {
-    setState(() {
-      _watchlistFuture = _watchlistRepository.getWatchlist();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
-        title: const Text('My Watchlist'),
-        backgroundColor: const Color(0xFF121212),
+        title: const Text(
+          'My Watchlist',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: const Color(0xFF1E1E1E),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      body: FutureBuilder<List>(
-        future: _watchlistFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+      body: Consumer<MovieProvider>(
+        builder: (context, provider, child) {
+          final watchlist = provider.watchlist;
+
+          if (watchlist.isEmpty) {
             return const Center(
               child: Text(
                 'Belum ada film di Watchlist kamu.',
@@ -49,29 +33,55 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
             );
           }
 
-          final watchlist = snapshot.data!;
-
           return ListView.builder(
+            padding: const EdgeInsets.all(12),
             itemCount: watchlist.length,
             itemBuilder: (context, index) {
               final movie = watchlist[index];
               return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                margin: const EdgeInsets.only(bottom: 12),
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E1E1E),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.white10),
                 ),
                 child: Row(
                   children: [
-                    const Icon(Icons.bookmark, color: Colors.amber, size: 30),
+                    // Poster kecil film di Watchlist
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: movie.posterPath.isNotEmpty
+                          ? Image.network(
+                              movie.fullPosterPath,
+                              width: 50,
+                              height: 75,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  const Icon(
+                                    Icons.broken_image,
+                                    color: Colors.grey,
+                                  ),
+                            )
+                          : Container(
+                              width: 50,
+                              height: 75,
+                              color: Colors.grey[800],
+                              child: const Icon(
+                                Icons.movie,
+                                color: Color(0xFFFFC107),
+                              ),
+                            ),
+                    ),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            movie['title'] ?? 'Tanpa Judul',
+                            movie.title,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -79,17 +89,38 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                             ),
                           ),
                           const SizedBox(height: 4),
-                          Text(
-                            'Catatan: ${movie['note'] ?? '-'}',
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            'Rating: ${movie['rating'] ?? 0.0}',
-                            style: const TextStyle(color: Colors.amberAccent),
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.star,
+                                color: Color(0xFFFFC107),
+                                size: 14,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${movie.voteAverage.toStringAsFixed(1)} / 10',
+                                style: const TextStyle(
+                                  color: Colors.white70,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
+                    ),
+                    // Tombol Hapus dari Watchlist
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.redAccent),
+                      onPressed: () {
+                        provider.toggleWatchlist(movie);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Dihapus dari Watchlist'),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
