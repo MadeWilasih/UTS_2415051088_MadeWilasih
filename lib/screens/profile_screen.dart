@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/movie_provider.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Mengambil jumlah watchlist secara dinamis dari MovieProvider
+    final watchlistCount = context.watch<MovieProvider>().watchlist.length;
+
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(
@@ -52,11 +58,15 @@ class ProfileScreen extends StatelessWidget {
             ),
             const SizedBox(height: 30),
 
-            // Kartu Statistik Ringkasan (Watchlist & Aktivitas)
+            // Kartu Statistik Ringkasan (Watchlist & Aktivitas) - Watchlist sekarang dinamis
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildStatCard(Icons.bookmark, 'Watchlist', '12 Film'),
+                _buildStatCard(
+                  Icons.bookmark,
+                  'Watchlist',
+                  '$watchlistCount Film',
+                ),
                 _buildStatCard(Icons.star, 'Rating', '4.8 / 5.0'),
                 _buildStatCard(Icons.movie_creation, 'Genre Fav', 'Sci-Fi'),
               ],
