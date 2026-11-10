@@ -6,13 +6,31 @@ import '../models/movie_model.dart';
 import '../providers/movie_provider.dart';
 import 'movie_notes_screen.dart';
 
-class MovieDetailScreen extends StatelessWidget {
+class MovieDetailScreen extends StatefulWidget {
   final Movie movie;
 
   const MovieDetailScreen({super.key, required this.movie});
 
   @override
+  State<MovieDetailScreen> createState() => _MovieDetailScreenState();
+}
+
+class _MovieDetailScreenState extends State<MovieDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    // Otomatis catat film ke riwayat tontonan saat halaman dibuka
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<MovieProvider>(
+        context,
+        listen: false,
+      ).addToWatchHistory(widget.movie);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final movie = widget.movie;
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
       appBar: AppBar(

@@ -10,6 +10,8 @@ class MovieProvider with ChangeNotifier {
   List<Movie> _movies = [];
   // Tambahan list untuk menyimpan data Watchlist
   final List<Movie> _watchlist = [];
+  // Tambahan list untuk menyimpan data Riwayat Tontonan
+  final List<Movie> _watchHistory = [];
 
   bool _isLoading = false;
   String _errorMessage = '';
@@ -17,6 +19,8 @@ class MovieProvider with ChangeNotifier {
   List<Movie> get movies => _movies;
   // Getter untuk mengambil data watchlist
   List<Movie> get watchlist => _watchlist;
+  // Getter untuk mengambil data riwayat tontonan
+  List<Movie> get watchHistory => _watchHistory;
 
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
@@ -49,5 +53,12 @@ class MovieProvider with ChangeNotifier {
   // Cek apakah film sudah ada di watchlist
   bool isInWatchlist(Movie movie) {
     return _watchlist.contains(movie);
+  }
+
+  // Fungsi untuk mencatat film ke riwayat tontonan
+  void addToWatchHistory(Movie movie) {
+    _watchHistory.removeWhere((m) => m.id == movie.id);
+    _watchHistory.insert(0, movie);
+    notifyListeners();
   }
 }
