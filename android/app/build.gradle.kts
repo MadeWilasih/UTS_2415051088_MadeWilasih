@@ -49,8 +49,3 @@ kotlin {
 flutter {
     source = "../.."
 }
-
-// Paksa matikan task cxx/cmake pada modul jni yang bikin error file locking di Windows
-tasks.matching { it.name.contains("configureCMake") || it.name.contains("generateCmake") }.configureEach {
-    enabled = false
-}
