@@ -19,14 +19,6 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
-
-        // Dukungan arsitektur untuk HP Android fisik (ARM) & emulator (x86_64)
-
-        externalNativeBuild {
-            cmake {
-                arguments("-DANDROID_STL=c++_shared", "-j1")
-            }
-        }
     }
 
     buildTypes {
@@ -44,13 +36,4 @@ kotlin {
 
 flutter {
     source = "../.."
-}
-
-/// Pengaman total untuk memotong Circular Evaluation CMake di Windows
-tasks.matching { 
-    it.name.contains("configureCMake") || 
-    it.name.contains("generateCmake") || 
-    it.name.contains("cmake") 
-}.configureEach {
-    enabled = false
 }
