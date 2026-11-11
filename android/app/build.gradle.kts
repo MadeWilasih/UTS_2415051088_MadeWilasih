@@ -21,10 +21,6 @@ android {
         versionName = flutter.versionName
 
         // Dukungan arsitektur untuk HP Android fisik (ARM) & emulator (x86_64)
-        ndk {
-            abiFilters.clear()
-            abiFilters.addAll(setOf("armeabi-v7a", "arm64-v8a", "x86_64"))
-        }
 
         externalNativeBuild {
             cmake {
