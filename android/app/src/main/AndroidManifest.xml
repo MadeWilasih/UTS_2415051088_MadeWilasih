@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- TAMBAHKAN IZIN INTERNET DI SINI AGAR BISA AKSES API & SUPABASE DI HP -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:label="uts_2415051088_madewilasih"
         android:name="${applicationName}"
