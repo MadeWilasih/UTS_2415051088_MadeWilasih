@@ -718,11 +718,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
               'Hapus Riwayat Pencarian & Cache',
               'Bersihkan data penyimpanan lokal sementara',
               onTap: () {
+                // Memanggil fungsi provider agar cache/history benar-benar bersih secara fungsional
+                Provider.of<MovieProvider>(
+                  context,
+                  listen: false,
+                ).clearCacheAndHistory();
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
                       'Riwayat pencarian dan cache berhasil dihapus!',
                     ),
+                    duration: Duration(seconds: 1),
                   ),
                 );
               },

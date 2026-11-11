@@ -76,4 +76,12 @@ class MovieProvider with ChangeNotifier {
   bool isFavorite(Movie movie) {
     return _favorites.contains(movie);
   }
+
+  // Fungsi untuk membersihkan riwayat tontonan dan cache pencarian
+  void clearCacheAndHistory() {
+    _watchHistory.clear();
+    _movies.clear();
+    _errorMessage = '';
+    notifyListeners();
+  }
 }
