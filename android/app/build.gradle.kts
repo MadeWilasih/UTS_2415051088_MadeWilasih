@@ -20,10 +20,10 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
 
-        // HANYA COMPILE UNTUK EMULATOR X86_64 (Membendung error log timing CMake)
+        // Dukungan arsitektur untuk HP Android fisik (ARM) & emulator (x86_64)
         ndk {
             abiFilters.clear()
-            abiFilters.add("x86_64")
+            abiFilters.addAll(setOf("armeabi-v7a", "arm64-v8a", "x86_64"))
         }
 
         externalNativeBuild {
