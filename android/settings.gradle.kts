@@ -24,15 +24,3 @@ plugins {
 }
 
 include(":app")
-
-// Pengaman untuk memutus Circular Evaluation Gradle 9 di Windows
-gradle.projectsLoaded {
-    rootProject.allprojects {
-        afterEvaluate {
-            val extension = it.extensions.findByName("android")
-            if (extension != null) {
-                // Memastikan properti direktori aman dari circular reference
-            }
-        }
-    }
-}
