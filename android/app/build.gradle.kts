@@ -46,7 +46,11 @@ flutter {
     source = "../.."
 }
 
-// Pengaman wajib untuk mencegah bug file locking / circular evaluation di Gradle 9.x pada Windows
-tasks.matching { it.name.contains("configureCMake") || it.name.contains("generateCmake") }.configureEach {
+/// Pengaman total untuk memotong Circular Evaluation CMake di Windows
+tasks.matching { 
+    it.name.contains("configureCMake") || 
+    it.name.contains("generateCmake") || 
+    it.name.contains("cmake") 
+}.configureEach {
     enabled = false
 }
