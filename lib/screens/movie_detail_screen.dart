@@ -126,53 +126,109 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Tombol Watchlist Interaktif
+                  // Tombol Watchlist & Tombol Favorit Interaktif
                   Consumer<MovieProvider>(
                     builder: (context, provider, child) {
                       final isInWatchlist = provider.isInWatchlist(movie);
-                      return SizedBox(
-                        width: double.infinity,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: isInWatchlist
-                                ? Colors.grey[800]
-                                : const Color(0xFFFFC107),
-                            foregroundColor: isInWatchlist
-                                ? Colors.white
-                                : Colors.black,
-                            padding: const EdgeInsets.symmetric(vertical: 12),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          icon: Icon(
-                            isInWatchlist
-                                ? Icons.bookmark
-                                : Icons.bookmark_border,
-                          ),
-                          label: Text(
-                            isInWatchlist
-                                ? 'Hapus dari Watchlist'
-                                : 'Tambah ke Watchlist',
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16,
-                            ),
-                          ),
-                          onPressed: () {
-                            provider.toggleWatchlist(movie);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  isInWatchlist
-                                      ? 'Dihapus dari Watchlist'
-                                      : 'Ditambahkan ke Watchlist',
+                      final isFavorite = provider.isFavorite(movie);
+
+                      return Column(
+                        children: [
+                          // Tombol Watchlist
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: isInWatchlist
+                                    ? Colors.grey[800]
+                                    : const Color(0xFFFFC107),
+                                foregroundColor: isInWatchlist
+                                    ? Colors.white
+                                    : Colors.black,
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
                                 ),
-                                duration: const Duration(seconds: 1),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
                               ),
-                            );
-                          },
-                        ),
+                              icon: Icon(
+                                isInWatchlist
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border,
+                              ),
+                              label: Text(
+                                isInWatchlist
+                                    ? 'Hapus dari Watchlist'
+                                    : 'Tambah ke Watchlist',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              onPressed: () {
+                                provider.toggleWatchlist(movie);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      isInWatchlist
+                                          ? 'Dihapus dari Watchlist'
+                                          : 'Ditambahkan ke Watchlist',
+                                    ),
+                                    duration: const Duration(seconds: 1),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+
+                          // Tombol Favorit (Ikon Hati)
+                          SizedBox(
+                            width: double.infinity,
+                            child: OutlinedButton.icon(
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: Colors.redAccent,
+                                side: const BorderSide(color: Colors.redAccent),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                              ),
+                              icon: Icon(
+                                isFavorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: Colors.redAccent,
+                              ),
+                              label: Text(
+                                isFavorite
+                                    ? 'Hapus dari Favorit'
+                                    : 'Tambah ke Favorit',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: () {
+                                provider.toggleFavorite(movie);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      isFavorite
+                                          ? 'Dihapus dari Film Favorit'
+                                          : 'Ditambahkan ke Film Favorit',
+                                    ),
+                                    duration: const Duration(seconds: 1),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
                       );
                     },
                   ),

@@ -8,19 +8,21 @@ class MovieProvider with ChangeNotifier {
   final MovieService _movieService = MovieService();
 
   List<Movie> _movies = [];
-  // Tambahan list untuk menyimpan data Watchlist
+  // List untuk menyimpan data Watchlist
   final List<Movie> _watchlist = [];
-  // Tambahan list untuk menyimpan data Riwayat Tontonan
+  // List untuk menyimpan data Riwayat Tontonan
   final List<Movie> _watchHistory = [];
+  // Tambahan list untuk menyimpan data Favorite (ikon hati)
+  final List<Movie> _favorites = [];
 
   bool _isLoading = false;
   String _errorMessage = '';
 
   List<Movie> get movies => _movies;
-  // Getter untuk mengambil data watchlist
   List<Movie> get watchlist => _watchlist;
-  // Getter untuk mengambil data riwayat tontonan
   List<Movie> get watchHistory => _watchHistory;
+  // Getter untuk mengambil data favorite
+  List<Movie> get favorites => _favorites;
 
   bool get isLoading => _isLoading;
   String get errorMessage => _errorMessage;
@@ -50,15 +52,28 @@ class MovieProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  // Cek apakah film sudah ada di watchlist
   bool isInWatchlist(Movie movie) {
     return _watchlist.contains(movie);
   }
 
-  // Fungsi untuk mencatat film ke riwayat tontonan
   void addToWatchHistory(Movie movie) {
     _watchHistory.removeWhere((m) => m.id == movie.id);
     _watchHistory.insert(0, movie);
     notifyListeners();
+  }
+
+  // Tambahan Fungsi untuk Toggle Favorite (Ikon Hati)
+  void toggleFavorite(Movie movie) {
+    if (_favorites.contains(movie)) {
+      _favorites.remove(movie);
+    } else {
+      _favorites.add(movie);
+    }
+    notifyListeners();
+  }
+
+  // Cek apakah film sudah ada di favorite
+  bool isFavorite(Movie movie) {
+    return _favorites.contains(movie);
   }
 }

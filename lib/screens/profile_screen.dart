@@ -202,11 +202,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Fungsi untuk Menampilkan Riwayat Tontonan (Film yang pernah dibuka) dengan Poster & Judul yang bisa diklik
+  // Fungsi untuk Menampilkan Riwayat Tontonan
   void _showWatchHistoryDialog(BuildContext context) {
     final provider = Provider.of<MovieProvider>(context, listen: false);
-    final historyMovies =
-        provider.watchHistory; // Mengambil data riwayat dari provider
+    final historyMovies = provider.watchHistory;
 
     showDialog(
       context: context,
@@ -273,7 +272,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.pop(context); // Tutup dialog riwayat
+                          Navigator.pop(context);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -297,7 +296,195 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  // Fungsi untuk Menampilkan Ulasan & Catatan dari Supabase dengan benar
+  // Fungsi untuk Menampilkan Daftar Film Watchlist
+  void _showWatchlistDialog(BuildContext context) {
+    final provider = Provider.of<MovieProvider>(context, listen: false);
+    final watchlistMovies = provider.watchlist;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF1E1E1E),
+          title: const Text(
+            'Watchlist Saya',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: watchlistMovies.isEmpty
+                ? const Text(
+                    'Belum ada film dalam daftar watchlist.',
+                    style: TextStyle(color: Colors.grey),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: watchlistMovies.length,
+                    itemBuilder: (context, index) {
+                      final movie = watchlistMovies[index];
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: movie.posterPath.isNotEmpty
+                              ? Image.network(
+                                  movie.fullPosterPath,
+                                  width: 40,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(
+                                        Icons.movie,
+                                        color: Colors.amber,
+                                      ),
+                                )
+                              : Container(
+                                  width: 40,
+                                  height: 60,
+                                  color: Colors.grey[800],
+                                  child: const Icon(
+                                    Icons.movie,
+                                    color: Colors.amber,
+                                  ),
+                                ),
+                        ),
+                        title: Text(
+                          movie.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          'Rating: ${movie.voteAverage.toStringAsFixed(1)}',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  MovieDetailScreen(movie: movie),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Tutup', style: TextStyle(color: Colors.amber)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Fungsi untuk Menampilkan Daftar Film Favorit
+  void _showFavoritesDialog(BuildContext context) {
+    final provider = Provider.of<MovieProvider>(context, listen: false);
+    final favoriteMovies = provider.favorites;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: const Color(0xFF1E1E1E),
+          title: const Text(
+            'Film Favorit Saya',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          content: SizedBox(
+            width: double.maxFinite,
+            child: favoriteMovies.isEmpty
+                ? const Text(
+                    'Belum ada film yang ditambahkan ke daftar favorit.',
+                    style: TextStyle(color: Colors.grey),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: favoriteMovies.length,
+                    itemBuilder: (context, index) {
+                      final movie = favoriteMovies[index];
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: ClipRRect(
+                          borderRadius: BorderRadius.circular(6),
+                          child: movie.posterPath.isNotEmpty
+                              ? Image.network(
+                                  movie.fullPosterPath,
+                                  width: 40,
+                                  height: 60,
+                                  fit: BoxFit.cover,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(
+                                        Icons.movie,
+                                        color: Colors.amber,
+                                      ),
+                                )
+                              : Container(
+                                  width: 40,
+                                  height: 60,
+                                  color: Colors.grey[800],
+                                  child: const Icon(
+                                    Icons.movie,
+                                    color: Colors.amber,
+                                  ),
+                                ),
+                        ),
+                        title: Text(
+                          movie.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          'Rating: ${movie.voteAverage.toStringAsFixed(1)}',
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  MovieDetailScreen(movie: movie),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Tutup', style: TextStyle(color: Colors.amber)),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Fungsi untuk Menampilkan Ulasan & Catatan dari Supabase
   void _showMyReviewsDialog() async {
     showDialog(
       context: context,
@@ -307,11 +494,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
 
     try {
-      // Mengambil data dari tabel ulasan Supabase
       final response = await Supabase.instance.client
           .from('movie_notes')
           .select();
-      Navigator.pop(context); // Tutup loading
+      Navigator.pop(context);
 
       showDialog(
         context: context,
@@ -337,8 +523,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       itemCount: response.length,
                       itemBuilder: (context, index) {
                         final item = response[index];
-
-                        // Menyesuaikan dengan nama kolom Supabase (bisa disesuaikan jika namanya berbeda)
                         final title =
                             item['movie_title'] ?? item['title'] ?? 'Film';
                         final note = item['user_note'] ?? item['note'] ?? '-';
@@ -417,7 +601,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final watchlistCount = context.watch<MovieProvider>().watchlist.length;
+    final provider = context.watch<MovieProvider>();
+    final watchlistCount = provider.watchlist.length;
+    final favoriteCount = provider.favorites.length;
 
     return Scaffold(
       backgroundColor: const Color(0xFF121212),
@@ -475,16 +661,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             const SizedBox(height: 30),
 
-            // Kartu Statistik Ringkasan (Watchlist, Rating, Genre Fav yang bisa diklik)
+            // Kartu Statistik Ringkasan (Watchlist, Favorit, dan Genre Fav)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildStatCard(
-                  Icons.bookmark,
-                  'Watchlist',
-                  '$watchlistCount Film',
+                GestureDetector(
+                  onTap: () => _showWatchlistDialog(context),
+                  child: _buildStatCard(
+                    Icons.bookmark,
+                    'Watchlist',
+                    '$watchlistCount Film',
+                  ),
                 ),
-                _buildStatCard(Icons.star, 'Rating', '4.8 / 5.0'),
+                GestureDetector(
+                  onTap: () => _showFavoritesDialog(context),
+                  child: _buildStatCard(
+                    Icons.favorite,
+                    'Favorit',
+                    '$favoriteCount Film',
+                  ),
+                ),
                 GestureDetector(
                   onTap: _showGenreChooserDialog,
                   child: _buildStatCard(
